@@ -1,13 +1,14 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import Table from './components/table/table'
+import Create from './components/modalCreate/create'
 import './App.css'
 
 function App() {
   
   return (
     <>
-      
+      <Table></Table>
+      <Create/>
     </>
   )
 }
