@@ -5,7 +5,7 @@ export default function Table() {
     return (
         <div className="h-screen flex flex-col justify-start gap-x-10 p-6">
             <div className="w-full flex justify-center">
-                <button className="text-zinc-50 text-2xl flex mb-3 px-10">Incuir aluno</button>
+                <button  className="text-zinc-50 text-2xl flex mb-3 px-10">Incuir aluno</button>
             </div>
             
             <table className="table-fixed w-full border-collapse border border-gray-200">
