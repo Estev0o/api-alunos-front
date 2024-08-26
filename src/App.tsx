@@ -16,14 +16,15 @@ function App() {
 
   return (
     <>
-      {isModalCreateOpen && (
-        <CreateModal
-          closeModalCreate={closeModalCreate}
-        />
-      )}
+      <CreateModal/>
     </>
   )
 }
 
 export default App
 ////</Table>
+///{isModalCreateOpen && (
+ // <CreateModal
+ // //  closeModalCreate={closeModalCreate}
+  ///>
+//)}
