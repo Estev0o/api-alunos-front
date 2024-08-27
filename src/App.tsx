@@ -1,27 +1,39 @@
-import { useState } from 'react'
-import Table from './components/table/table'
-import CreateModal from './components/modalCreate/create'
+import { useState, useEffect } from 'react'
+//import Table from './components/table/table'
+//import CreateModal from './components/modalCreate/create'
+import api from './services/api'
 import './App.css'
 
-function App() {
-  const [isModalCreateOpen, setModalCreateOpen] = useState(false)
+export default function App() {
+  //const [isModalCreateOpen, setModalCreateOpen] = useState(false)
 
-  function openModalCreate() {
-    setModalCreateOpen(true)
-  }
+  //function openModalCreate() {
+    //setModalCreateOpen(true)
+  //}
 
-  function closeModalCreate() {
-    setModalCreateOpen(false)
-  }
+  //function closeModalCreate() {
+    //setModalCreateOpen(false)
+  //}
+
+  const [mensagens, setMessages] = useState([])
+  useEffect(() => {
+    api.post('List').then(({data}) => {
+      setMessages(data)
+    })
+  })
 
   return (
     <>
-      <CreateModal/>
+
+    {mensagens.map(item => {
+      <div key={item.id}></div>
+    })}
+      
     </>
   )
 }
 
-export default App
+
 ////</Table>
 ///{isModalCreateOpen && (
  // <CreateModal
