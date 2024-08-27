@@ -1,4 +1,6 @@
 import { } from "lucide-react"
+import BtnCreate from "../buttons/create/btnCreate"
+import BtnCancel from "../buttons/Cancel/btnCancel"
 //import { useState } from "react"
 
 interface CreateProps {
@@ -31,8 +33,8 @@ export default function CreateModal({
                 </div>
 
                 <div className="w-full max-w-4xl flex justify-center space-x-4 pb-7">
-                    <button className="bg-blue-500 text-zinc-50 text-2xl py-2 px-6 rounded-xl shadow-md hover:bg-blue-600">Incluir</button>
-                    <button className="bg-red-500 text-zinc-50 text-2xl py-2 px-6 rounded-xl shadow-md hover:bg-red-600">Cancelar</button>
+                    <BtnCreate/>
+                    <BtnCancel/>
                 </div>
             </div>
         </form>
