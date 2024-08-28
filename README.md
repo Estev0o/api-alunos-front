@@ -48,3 +48,14 @@ export default tseslint.config({
   },
 })
 ```
+# npm i
+<p>Depedences </p>
+
+```
+npm i 
+npm i axios
+npm i react-dom
+npm i lucide-react
+npm i react-router-dom
+
+```
