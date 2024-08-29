@@ -1,5 +1,5 @@
 import { } from "lucide-react"
-import { useState, useEffect} from "react"
+import { useState, useEffect } from "react"
 import api from "../../services/api";
 
 interface DataTable {
@@ -9,23 +9,27 @@ interface DataTable {
     email: string
 }
 
-export default function Table() {
+interface TableProps {
+    openModalCreate: () => void;
+}
+
+export default function Table({openModalCreate}: TableProps) {
 
     const [dataTable, setdataTable] = useState<DataTable[]>([]);
 
-useEffect(() => {
-    api.get<DataTable[]>('List')  // Certifique-se de que a rota está correta
-        .then(({ data }) => {
-            setdataTable(data);
-        })
-        .catch(error => {
-            console.error("Erro ao buscar mensagens:", error);
-        });
-}, []);
+    useEffect(() => {
+        api.get<DataTable[]>('List')  // Certifique-se de que a rota está correta
+            .then(({ data }) => {
+                setdataTable(data);
+            })
+            .catch(error => {
+                console.error("Erro ao buscar mensagens:", error);
+            });
+    }, []);
     return (
         <div className="h-screen flex flex-col justify-start gap-x-10 p-6">
             <div className="w-full flex justify-center">
-                <button className="text-zinc-50 text-2xl flex mb-3 px-10">Incuir aluno</button>
+                <button className="text-zinc-50 text-2xl flex mb-3 px-10" onClick={openModalCreate}>Incuir aluno</button>
             </div>
 
             <table className="table-fixed w-full border-collapse border border-gray-200">
@@ -40,7 +44,7 @@ useEffect(() => {
 
                 <tbody>
                     {dataTable.map((itens) => (
-                        <tr>
+                        <tr key={itens.id}>
                             <td className="py-3 px-4"> {itens.id}</td>
                             <td className="py-3 px-4"> {itens.nome}</td>
                             <td className="py-3 px-4"> {itens.idade}</td>
