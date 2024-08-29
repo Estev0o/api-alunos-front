@@ -1,19 +1,30 @@
 import { useState, useEffect } from 'react';
-import api from './services/api';
 import './App.css';
 import CreateModal from './components/modalCreate/create';
+import Table from './components/table/table';
 
-// Defina a interface que representa a estrutura do objeto mensagem
+
+
 
 
 export default function App() {
-  // Tipagem do estado com a interface Mensagem[]
-  
+  const [isModalCreateOpen, setIsModalCreateOpen] = useState(false);
 
+  function openModalCreate() {
+    setIsModalCreateOpen(true);
+  }
+  
+  function closeModalCreate() {
+    setIsModalCreateOpen(false);
+  }
+  
   return (
     <>
-
-      <CreateModal/>
+      
+      {isModalCreateOpen && (
+        <CreateModal closeModalCreate={closeModalCreate} />
+      )}
+      <Table openModalCreate={openModalCreate} />
 
 
     </>
