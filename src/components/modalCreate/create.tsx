@@ -15,17 +15,16 @@ export default function CreateModal({ closeModalCreate }: CreateProps) {
     function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
 
-        // Valida se idade é um número
         const idadeNumber = parseInt(idade, 10);
         if (isNaN(idadeNumber)) {
             console.error("Idade inválida");
             return;
         }
 
-        // Envia a solicitação POST para a API
+
         api.post('CreateStudent', { Nome: nome, Email: email, Idade: idadeNumber })
             .then(() => {
-                closeModalCreate();
+                closeModalCreate(); // Atualiza a tabela e fecha o modal
                 setNome('');
                 setEmail('');
                 setIdade('');

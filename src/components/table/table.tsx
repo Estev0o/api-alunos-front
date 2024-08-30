@@ -1,35 +1,42 @@
-import { } from "lucide-react"
-import { useState, useEffect } from "react"
+import { useState, useEffect } from "react";
 import api from "../../services/api";
+import CreateModal from "../modalCreate/create";
 
 interface DataTable {
-    id: number;     // ou string, dependendo do tipo no banco de dados
-    nome: string;   // outras propriedades que você queira incluir
+    id: number;
+    nome: string;
     idade: number;
-    email: string
+    email: string;
 }
 
-interface TableProps {
-    openModalCreate: () => void;
-}
+export default function Table() {
+    const [dataTable, setDataTable] = useState<DataTable[]>([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
-export default function Table({openModalCreate}: TableProps) {
-
-    const [dataTable, setdataTable] = useState<DataTable[]>([]);
+    const fetchData = () => {
+        api.get<DataTable[]>('List')
+            .then(({ data }) => setDataTable(data))
+            .catch(error => console.error("Erro ao buscar dados:", error));
+    };
 
     useEffect(() => {
-        api.get<DataTable[]>('List')  // Certifique-se de que a rota está correta
-            .then(({ data }) => {
-                setdataTable(data);
-            })
-            .catch(error => {
-                console.error("Erro ao buscar mensagens:", error);
-            });
+        fetchData();
     }, []);
+
+    const handleCreateSuccess = () => {
+        fetchData(); // Recarrega os dados após a criação
+        setIsModalOpen(false); // Fecha o modal
+    };
+
     return (
         <div className="h-screen flex flex-col justify-start gap-x-10 p-6">
             <div className="w-full flex justify-center">
-                <button className="bg-cyan-900 text-zinc-50 rounded-xl hover:bg-cyan-600 text-2xl flex mb-3 px-10" onClick={openModalCreate}>Incuir aluno</button>
+                <button
+                    className="bg-cyan-900 text-zinc-50 rounded-xl hover:bg-cyan-600 text-2xl flex mb-3 px-10"
+                    onClick={() => setIsModalOpen(true)}
+                >
+                    Incluir aluno
+                </button>
             </div>
 
             <table className="table-fixed w-full border-collapse border border-gray-200">
@@ -41,18 +48,21 @@ export default function Table({openModalCreate}: TableProps) {
                         <th className="py-3 px-4">E-mail</th>
                     </tr>
                 </thead>
-
                 <tbody>
-                    {dataTable.map((itens) => (
-                        <tr key={itens.id}>
-                            <td className="py-3 px-4"> {itens.id}</td>
-                            <td className="py-3 px-4"> {itens.nome}</td>
-                            <td className="py-3 px-4"> {itens.idade}</td>
-                            <td className="py-3 px-4"> {itens.email}</td>
+                    {dataTable.map((item) => (
+                        <tr key={item.id}>
+                            <td className="py-3 px-4"> {item.id}</td>
+                            <td className="py-3 px-4"> {item.nome}</td>
+                            <td className="py-3 px-4"> {item.idade}</td>
+                            <td className="py-3 px-4"> {item.email}</td>
                         </tr>
                     ))}
                 </tbody>
             </table>
+
+            {isModalOpen && (
+                <CreateModal closeModalCreate={handleCreateSuccess} />
+            )}
         </div>
-    )
+    );
 }
