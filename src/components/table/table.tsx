@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import api from "../../services/api";
 import CreateModal from "../modalCreate/create";
+import Pagination from "../buttons/pagination/pagination";
 
 interface DataTable {
     id: number;
@@ -12,21 +13,37 @@ interface DataTable {
 export default function Table() {
     const [dataTable, setDataTable] = useState<DataTable[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [currentPage, setCurrentPage] = useState(0)
+    const [totalItems, setTotalItems] = useState(0)
+    const pageSize = 8
+        const skip = currentPage * pageSize
+        const take = pageSize;
+    
 
     const fetchData = () => {
-        api.get<DataTable[]>('List')
-            .then(({ data }) => setDataTable(data))
-            .catch(error => console.error("Erro ao buscar dados:", error));
-    };
+        
+
+        api.get<DataTable[]>(`/List?skip=${skip}&take=${take}`)
+        .then(({ data }) => setDataTable(data))
+        .catch(error => console.error("Erro ao buscar dados:", error));
+    }
+
+    //const fetchData = () => {
+    //    api.get<DataTable[]>('List')
+    //        .then(({ data }) => setDataTable(data))
+    //        .catch(error => console.error("Erro ao buscar dados:", error));
+    //};
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [currentPage]);
 
     const handleCreateSuccess = () => {
         fetchData(); // Recarrega os dados após a criação
         setIsModalOpen(false); // Fecha o modal
     };
+
+    const totalPages = Math.ceil(totalItems/pageSize)
 
     return (
         <div className="h-screen flex flex-col justify-start gap-x-10 p-6">
@@ -59,6 +76,12 @@ export default function Table() {
                     ))}
                 </tbody>
             </table>
+
+            <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={(page) => setCurrentPage(page)}
+            />
 
             {isModalOpen && (
                 <CreateModal closeModalCreate={handleCreateSuccess} />
