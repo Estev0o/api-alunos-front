@@ -10,29 +10,32 @@ interface DataTable {
     email: string;
 }
 
+interface ApiResponse {
+    totalCount: number;
+    skip: number;
+    take: number;
+    students: DataTable[];
+}
+
 export default function Table() {
     const [dataTable, setDataTable] = useState<DataTable[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [currentPage, setCurrentPage] = useState(0)
-    const [totalItems, setTotalItems] = useState(0)
-    const pageSize = 8
-        const skip = currentPage * pageSize
-        const take = pageSize;
-    
+    const [currentPage, setCurrentPage] = useState(0);
+    const [totalItems, setTotalItems] = useState(0);
+    const [pageSize, setPageSize] = useState(8); // Adiciona estado para pageSize
+    const skip = currentPage * pageSize;
+    const take = pageSize;
 
-    const fetchData = () => {
-        
-
-        api.get<DataTable[]>(`/List?skip=${skip}&take=${take}`)
-        .then(({ data }) => setDataTable(data))
-        .catch(error => console.error("Erro ao buscar dados:", error));
-    }
-
-    //const fetchData = () => {
-    //    api.get<DataTable[]>('List')
-    //        .then(({ data }) => setDataTable(data))
-    //        .catch(error => console.error("Erro ao buscar dados:", error));
-    //};
+    const fetchData = async () => {
+        try {
+            const { data } = await api.get<ApiResponse>(`/List?skip=${skip}&take=${take}`);
+            setDataTable(data.students);
+            setTotalItems(data.totalCount);
+            setPageSize(data.take); // Atualiza pageSize com o valor retornado
+        } catch (error) {
+            console.error("Erro ao buscar dados:", error);
+        }
+    };
 
     useEffect(() => {
         fetchData();
@@ -43,7 +46,7 @@ export default function Table() {
         setIsModalOpen(false); // Fecha o modal
     };
 
-    const totalPages = Math.ceil(totalItems/pageSize)
+    const totalPages = Math.ceil(totalItems / pageSize);
 
     return (
         <div className="h-screen flex flex-col justify-start gap-x-10 p-6">
