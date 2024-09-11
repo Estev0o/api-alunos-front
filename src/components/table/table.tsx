@@ -1,7 +1,11 @@
 import { useState, useEffect } from "react";
 import api from "../../services/api";
 import CreateModal from "../modalCreate/create";
-import Pagination from "../buttons/pagination/pagination";
+import Pagination from "../pagination/pagination";
+
+interface TableProps {
+    openModalCreate: () => void,
+}
 
 interface DataTable {
     id: number;
@@ -12,17 +16,16 @@ interface DataTable {
 
 interface ApiResponse {
     totalCount: number;
-    skip: number;
-    take: number;
     students: DataTable[];
 }
 
-export default function Table() {
+export default function Table({ openModalCreate }: TableProps) {
     const [dataTable, setDataTable] = useState<DataTable[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(0);
     const [totalItems, setTotalItems] = useState(0);
-    const [pageSize, setPageSize] = useState(8); // Adiciona estado para pageSize
+    const [pageSize] = useState(8); // Definido como constante, sem necessidade de estado
+
     const skip = currentPage * pageSize;
     const take = pageSize;
 
@@ -31,7 +34,6 @@ export default function Table() {
             const { data } = await api.get<ApiResponse>(`/List?skip=${skip}&take=${take}`);
             setDataTable(data.students);
             setTotalItems(data.totalCount);
-            setPageSize(data.take); // Atualiza pageSize com o valor retornado
         } catch (error) {
             console.error("Erro ao buscar dados:", error);
         }
@@ -39,7 +41,7 @@ export default function Table() {
 
     useEffect(() => {
         fetchData();
-    }, [currentPage]);
+    }, [currentPage]); // Dependência apenas do currentPage
 
     const handleCreateSuccess = () => {
         fetchData(); // Recarrega os dados após a criação
@@ -53,7 +55,7 @@ export default function Table() {
             <div className="w-full flex justify-center">
                 <button
                     className="bg-cyan-900 text-zinc-50 rounded-xl hover:bg-cyan-600 text-2xl flex mb-3 px-10"
-                    onClick={() => setIsModalOpen(true)}
+                    onClick={openModalCreate}
                 >
                     Incluir aluno
                 </button>
