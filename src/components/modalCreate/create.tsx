@@ -1,5 +1,5 @@
 import BtnCreate from "../buttons/create/btnCreate";
-import BtnCancel from "../buttons/Cancel/btnCancel";
+import BtnCancel from "../buttons/cancel/btnCancel";
 import { useState } from "react";
 import api from "../../services/api";
 
